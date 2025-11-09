@@ -11,6 +11,7 @@ provider:
     role: arn:aws:iam::746358408146:role/LabRole	
   environment:
     TABLE_NAME: ${sls:stage}-t_comentarios
+    BUCKET_NAME: ${sls:stage}-comentarios-bucket
 
 functions:
   crear:
@@ -40,3 +41,15 @@ resources:
             KeyType: RANGE
         # Set the capacity to auto-scale
         BillingMode: PAY_PER_REQUEST
+    BucketComentarios:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.BUCKET_NAME}
+        # Opcional: versionado y configuración
+        VersioningConfiguration:
+          Status: Enabled
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
